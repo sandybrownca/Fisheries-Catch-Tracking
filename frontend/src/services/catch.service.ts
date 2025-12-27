@@ -19,3 +19,18 @@ export function getCatchLogs(params: GetCatchLogsParams = {}) {
 
   return api<ApiResponse<CatchLog[]>>(`/catches?${query.toString()}`);
 }
+
+export function getCatchLocationData(params?: {
+  startDate?: string;
+  endDate?: string;
+  speciesId?: string;
+}) {
+  const query = new URLSearchParams();
+  if (params?.startDate) query.append("start_date", params.startDate);
+  if (params?.endDate) query.append("end_date", params.endDate);
+  if (params?.speciesId) query.append("species_id", params.speciesId);
+
+  return api<ApiResponse<CatchLog[]>>(
+    `/catches/locations?${query.toString()}`
+  );
+}

@@ -3,10 +3,10 @@ import { CatchLog, CreateCatchLogDTO } from '../types';
 import { checkViolations } from './violationService';
 
 export class CatchService {
-  
+
   async createCatchLog(data: CreateCatchLogDTO): Promise<CatchLog> {
     const client = await pool.connect();
-    
+
     try {
       await client.query('BEGIN');
 
@@ -129,13 +129,13 @@ export class CatchService {
     }
 
     // Get total count
-    const countQuery = query.replace(
-      /SELECT .* FROM/,
-      'SELECT COUNT(*) FROM'
-    );
+    const countQuery = `
+  SELECT COUNT(*) AS total_count
+  FROM (${query}) AS subquery
+`;
     const countResult = await pool.query(countQuery, values);
     //console.log(JSON.stringify(countResult));
-    const total = parseInt(countResult.rows[0].count);
+    const total = parseInt(countResult.rows[0]?.total_count || '0');
 
     // Add sorting and pagination
     query += ` ORDER BY cl.catch_date DESC, cl.catch_time DESC`;
@@ -165,7 +165,7 @@ export class CatchService {
     `;
 
     const result = await pool.query(query, [verifiedBy, id]);
-    
+
     if (result.rows.length === 0) {
       throw new Error('Catch log not found or already verified');
     }

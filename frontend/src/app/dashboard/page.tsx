@@ -1,14 +1,19 @@
 import { getDashboardStats, getCatchVsQuota } from "@/services/dashboard.service";
 import StatCard from "@/components/ui/StatCard";
 import CatchQuotaChart from "@/components/charts/CatchQuotaChart";
+import CatchMap from "@/components/maps/CatchMap";
+import { getCatchLocationData } from "@/services/catch.service";
+
 
 export default async function DashboardPage() {
   const statsResponse = await getDashboardStats(2024);
   const quotaResponse = await getCatchVsQuota(2024);
+  const mapResponse = await getCatchLocationData({ startDate: "2024-01-01", endDate: "2024-12-31" });
+
 
   const stats = statsResponse.data;
   const catchVsQuota = quotaResponse.data;
-
+  const catchLocations = mapResponse.data;
   return (
     <section>
       <h1 style={{ marginBottom: 24 }}>Sustainability Dashboard</h1>
@@ -40,6 +45,12 @@ export default async function DashboardPage() {
       <div>
         <h2 style={{ marginBottom: 16 }}>Catch vs Quota</h2>
         <CatchQuotaChart data={catchVsQuota} />
+      </div>
+
+      {/* Catch Locations Map */}
+      <div style={{ marginTop: 40 }}>
+        <h2 style={{ marginBottom: 16 }}>Catch Locations Map</h2>
+        <CatchMap data={catchLocations} />
       </div>
     </section>
   );
