@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: fisheries-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: fisheries_db
+      POSTGRES_USER: fisheries_user
+      POSTGRES_PASSWORD: fisheries_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

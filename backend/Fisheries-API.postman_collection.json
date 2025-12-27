@@ -1,0 +1,96 @@
+{
+  "info": {
+    "name": "Fisheries Catch Tracking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "Vessels",
+      "item": [
+        {
+          "name": "Create Vessel",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/vessels",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"registration_number\": \"FV-2024-TEST\",\n  \"vessel_name\": \"Test Vessel\",\n  \"vessel_type\": \"Trawler\",\n  \"length_meters\": 25.5,\n  \"tonnage\": 150.0,\n  \"home_port\": \"Portland\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get All Vessels",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/vessels"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catches",
+      "item": [
+        {
+          "name": "Create Catch Log",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/catches",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vessel_id\": \"{{vessel_id}}\",\n  \"species_id\": \"{{species_id}}\",\n  \"catch_date\": \"2024-12-26\",\n  \"catch_time\": \"08:30:00\",\n  \"weight_kg\": 1500.5,\n  \"latitude\": 45.5234,\n  \"longitude\": -122.6762,\n  \"fishing_zone\": \"Zone 3\",\n  \"fishing_method\": \"Trawling\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get Catch Logs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/catches?page=1&limit=20"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/dashboard/stats"
+          }
+        },
+        {
+          "name": "Catch vs Quota",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/dashboard/catch-vs-quota"
+          }
+        },
+        {
+          "name": "Overfishing Alerts",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/dashboard/overfishing-alerts"
+          }
+        }
+      ]
+    }
+  ]
+}
