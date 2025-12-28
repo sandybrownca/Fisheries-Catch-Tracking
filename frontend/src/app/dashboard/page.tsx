@@ -1,8 +1,11 @@
+
 import { getDashboardStats, getCatchVsQuota } from "@/services/dashboard.service";
 import StatCard from "@/components/ui/StatCard";
 import CatchQuotaChart from "@/components/charts/CatchQuotaChart";
-import CatchMap from "@/components/maps/CatchMap";
 import { getCatchLocationData } from "@/services/catch.service";
+import CatchMapWrapper from "@/components/maps/CatchMapWrapper";
+
+
 
 
 export default async function DashboardPage() {
@@ -50,7 +53,7 @@ export default async function DashboardPage() {
       {/* Catch Locations Map */}
       <div style={{ marginTop: 40 }}>
         <h2 style={{ marginBottom: 16 }}>Catch Locations Map</h2>
-        <CatchMap data={catchLocations} />
+        <CatchMapWrapper startDate="2024-01-01" endDate="2025-12-31" />
       </div>
     </section>
   );

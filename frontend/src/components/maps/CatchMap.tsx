@@ -8,6 +8,7 @@ interface CatchMapProps {
   data: CatchLog[];
 }
 
+
 export default function CatchMap({ data }: CatchMapProps) {
   // Default center: if data exists, center on first point; else fallback
   const center: [number, number] = data.length
@@ -17,9 +18,10 @@ export default function CatchMap({ data }: CatchMapProps) {
   // Custom marker icon (optional)
   const fishIcon = new L.Icon({
     iconUrl:
-      "https://cdn-icons-png.flaticon.com/512/616/616408.png", // small fish icon
+      "https://cdn-icons-png.flaticon.com/512/2271/2271030.png", // small fish icon
     iconSize: [25, 25],
     iconAnchor: [12, 25],
+
   });
 
   return (
