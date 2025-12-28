@@ -6,6 +6,7 @@ export default function HomePage() {
         Monitor vessels, catch logs, quotas, and regulatory compliance in
         real time.
       </p>
+      
     </section>
   );
 }

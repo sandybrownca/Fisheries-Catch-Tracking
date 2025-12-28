@@ -1,0 +1,78 @@
+/* ===============================
+   Global Data Table Styles
+   =============================== */
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+/* Header */
+.data-table thead {
+  background-color: #f8fafc;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+/* Body */
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #475569;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* Numeric alignment */
+.data-table .text-right {
+  text-align: right;
+}
+
+/* Status badges */
+.table-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-safe {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.badge-warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.badge-critical {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-exceeded {
+  background-color: #7f1d1d;
+  color: #ffffff;
+}
+
+/* Empty state */
+.table-empty {
+  text-align: center;
+  padding: 24px;
+  color: #94a3b8;
+}

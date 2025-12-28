@@ -2,10 +2,10 @@ import { pool } from '../db/config';
 import { CatchVsQuotaData, SpeciesTrendData, DashboardStats } from '../types';
 
 export class DashboardService {
-  
+
   async getDashboardStats(year?: number): Promise<DashboardStats> {
     const currentYear = year || new Date().getFullYear();
-    
+
     // Total and active vessels
     const vesselsQuery = `
       SELECT 
@@ -61,11 +61,11 @@ export class DashboardService {
     `;
     const complianceResult = await pool.query(complianceQuery, [currentYear]);
     const compliance = complianceResult.rows[0];
-    
+
     const complianceRate = compliance.total_quotas > 0
       ? (parseInt(compliance.compliant_quotas) / parseInt(compliance.total_quotas)) * 100
       : 100;
-    console.log("vessels.total ",vessels.total);
+    console.log("vessels.total ", vessels.total);
     return {
       total_vessels: parseInt(vessels.total),
       active_vessels: parseInt(vessels.active),
@@ -80,7 +80,7 @@ export class DashboardService {
 
   async getCatchVsQuotaData(year?: number, vesselId?: string): Promise<CatchVsQuotaData[]> {
     const currentYear = year || new Date().getFullYear();
-    
+
     let query = `
       WITH catch_totals AS (
         SELECT 
@@ -127,14 +127,17 @@ export class DashboardService {
     if (vesselId) {
       query += ` AND q.vessel_id = $${paramCount}`;
       values.push(vesselId);
-    } else {
+    }
+    /*
+    else {
       query += ' AND q.vessel_id IS NULL';
     }
-
+    */
     query += ' ORDER BY percentage_used DESC';
 
     const result = await pool.query(query, values);
-    
+    //console.log(query);
+    //console.log(values);
     return result.rows.map(row => ({
       species_id: row.species_id,
       species_name: row.species_name,
@@ -196,7 +199,7 @@ export class DashboardService {
 
   async getOverfishingAlerts(year?: number): Promise<any[]> {
     const currentYear = year || new Date().getFullYear();
-    
+
     const query = `
       WITH catch_totals AS (
         SELECT 
@@ -227,7 +230,7 @@ export class DashboardService {
     `;
 
     const result = await pool.query(query, [currentYear]);
-    
+
     return result.rows.map(row => ({
       species_name: row.species_name,
       vessel_name: row.vessel_name,
@@ -241,7 +244,7 @@ export class DashboardService {
 
   async getTopVesselsBySpecies(speciesId: string, year?: number, limit: number = 10): Promise<any[]> {
     const currentYear = year || new Date().getFullYear();
-    
+
     const query = `
       SELECT 
         v.id,
@@ -259,7 +262,7 @@ export class DashboardService {
     `;
 
     const result = await pool.query(query, [speciesId, currentYear, limit]);
-    
+
     return result.rows.map(row => ({
       vessel_id: row.id,
       vessel_name: row.vessel_name,
@@ -271,7 +274,7 @@ export class DashboardService {
 
   async getSeasonalCatchPattern(year?: number): Promise<any[]> {
     const currentYear = year || new Date().getFullYear();
-    
+
     const query = `
       SELECT 
         EXTRACT(MONTH FROM catch_date) as month,
@@ -287,7 +290,7 @@ export class DashboardService {
     `;
 
     const result = await pool.query(query, [currentYear]);
-    
+
     return result.rows.map(row => ({
       month: parseInt(row.month),
       month_name: row.month_name.trim(),
@@ -296,6 +299,104 @@ export class DashboardService {
       catch_count: parseInt(row.catch_count)
     }));
   }
+
+  /**
+ * Returns quota usage by species for a given year
+ */
+  async getQuotaUsage(year: number) {
+    const query = `
+   WITH catch_totals AS (
+  SELECT
+    species_id,
+    SUM(weight_kg) AS total_catch_kg
+  FROM catch_logs
+  WHERE EXTRACT(YEAR FROM catch_date) = $1
+  GROUP BY species_id
+)
+SELECT
+  s.id AS species_id,
+  s.common_name AS species_name,
+  COALESCE(ct.total_catch_kg, 0) AS total_catch_kg,
+  q.total_quota_kg AS quota_kg,
+  (
+    COALESCE(ct.total_catch_kg, 0)::numeric
+    / NULLIF(q.total_quota_kg, 0)::numeric
+    * 100
+  ) AS percentage_used,
+  CASE
+    WHEN COALESCE(ct.total_catch_kg, 0) > q.total_quota_kg THEN 'exceeded'
+    WHEN (
+      COALESCE(ct.total_catch_kg, 0)::numeric
+      / NULLIF(q.total_quota_kg, 0)::numeric
+    ) >= 0.9 THEN 'critical'
+    WHEN (
+      COALESCE(ct.total_catch_kg, 0)::numeric
+      / NULLIF(q.total_quota_kg, 0)::numeric
+    ) >= 0.75 THEN 'warning'
+    ELSE 'safe'
+  END AS status
+FROM quotas q
+JOIN species s ON q.species_id = s.id
+LEFT JOIN catch_totals ct ON ct.species_id = s.id
+WHERE q.year = $1
+  AND q.status = 'active'
+  --AND q.vessel_id IS NULL
+ORDER BY percentage_used DESC;
+
+  `;
+
+    const { rows } = await pool.query(query, [year]);
+    console.log(rows);
+    return {
+      year,
+      data: rows,
+    };
+  }
+
+  // async getQuotaUsage(year: number) {
+  // const query = `
+  //   WITH catch_totals AS (
+  //     SELECT
+  //       species_id,
+  //       SUM(weight_kg) AS total_catch_kg
+  //     FROM catch_logs
+  //     WHERE EXTRACT(YEAR FROM catch_date) = $1
+  //     GROUP BY species_id
+  //   )
+  //   SELECT
+  //     s.id AS species_id,
+  //     s.common_name AS species_name,
+  //     COALESCE(ct.total_catch_kg, 0) AS total_catch_kg,
+  //     q.total_quota_kg AS quota_kg,
+  //     (
+  //       COALESCE(ct.total_catch_kg, 0)::numeric
+  //       / NULLIF(q.total_quota_kg, 0)::numeric
+  //       * 100
+  //     ) AS percentage_used,
+  //     CASE
+  //       WHEN COALESCE(ct.total_catch_kg, 0) > q.total_quota_kg THEN 'exceeded'
+  //       WHEN (
+  //         COALESCE(ct.total_catch_kg, 0)::numeric
+  //         / NULLIF(q.total_quota_kg, 0)::numeric
+  //       ) >= 0.9 THEN 'critical'
+  //       WHEN (
+  //         COALESCE(ct.total_catch_kg, 0)::numeric
+  //         / NULLIF(q.total_quota_kg, 0)::numeric
+  //       ) >= 0.75 THEN 'warning'
+  //       ELSE 'safe'
+  //     END AS status
+  //   FROM quotas q
+  //   JOIN species s ON q.species_id = s.id
+  //   LEFT JOIN catch_totals ct ON ct.species_id = s.id
+  //   WHERE q.year = $1
+  //     AND q.status = 'active'
+  //     --AND q.vessel_id IS NULL
+  //   ORDER BY percentage_used DESC
+  // `;
+
+  // const result = await pool.query(query, [year]);
+  // return result.rows;
+// }
 }
 
 export default new DashboardService();

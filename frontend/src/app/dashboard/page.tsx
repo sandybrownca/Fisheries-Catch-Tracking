@@ -2,25 +2,26 @@
 import { getDashboardStats, getCatchVsQuota } from "@/services/dashboard.service";
 import StatCard from "@/components/ui/StatCard";
 import CatchQuotaChart from "@/components/charts/CatchQuotaChart";
-import { getCatchLocationData } from "@/services/catch.service";
 import CatchMapWrapper from "@/components/maps/CatchMapWrapper";
 
 
 
 
 export default async function DashboardPage() {
-  const statsResponse = await getDashboardStats(2024);
-  const quotaResponse = await getCatchVsQuota(2024);
-  const mapResponse = await getCatchLocationData({ startDate: "2024-01-01", endDate: "2024-12-31" });
+  const statsResponse = await getDashboardStats(2025); //hardcoded for now
+  const quotaResponse = await getCatchVsQuota(2025);
+  //const mapResponse = await getCatchLocationData({ startDate: "2024-01-01", endDate: "2025-12-31" });
 
-
+  //console.log(quotaResponse)
   const stats = statsResponse.data;
+  //stats.active_violations =12;
+  //stats.quota_compliance_rate = 89;
   const catchVsQuota = quotaResponse.data;
-  const catchLocations = mapResponse.data;
+  //const catchLocations = mapResponse.data;
   return (
     <section>
       <h1 style={{ marginBottom: 24 }}>Sustainability Dashboard</h1>
-
+      
       {/* Stat Cards */}
       <div
         style={{
@@ -34,7 +35,7 @@ export default async function DashboardPage() {
         <StatCard label="Catch Today (kg)" value={stats.total_catch_today} />
         <StatCard
           label="Active Violations"
-          value={stats.active_violations}
+          value= {stats.active_violations}
           highlight={stats.active_violations > 0 ? "warning" : "normal"}
         />
         <StatCard

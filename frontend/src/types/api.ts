@@ -40,3 +40,12 @@ export interface CatchLog {
   violation: boolean;
   violation_severity?: "low" | "medium" | "high" | "critical";
 }
+
+export interface QuotaUsage {
+  species_id: string;
+  species_name: string;
+  total_catch_kg: number;
+  quota_kg: number;
+  percentage_used: number;
+  status: "safe" | "warning" | "critical" | "exceeded";
+}

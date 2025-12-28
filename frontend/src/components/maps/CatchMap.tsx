@@ -44,7 +44,7 @@ export default function CatchMap({ data }: CatchMapProps) {
             <br />
             Weight: {c.weight_kg} kg
             <br />
-            Date: {c.catch_date}
+            Date: {new Date(c.catch_date).toDateString()}
           </Popup>
         </Marker>
       ))}

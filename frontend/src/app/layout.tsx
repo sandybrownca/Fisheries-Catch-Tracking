@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 
+
 export const metadata = {
   title: "Fisheries Sustainability Dashboard",
   description: "Catch tracking and regulatory compliance system",

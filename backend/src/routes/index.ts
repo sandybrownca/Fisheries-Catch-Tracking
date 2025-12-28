@@ -77,6 +77,8 @@ router.put('/violations/:id/resolve', violationController.resolveViolation);
 // ============================================
 router.get('/dashboard/stats', dashboardController.getDashboardStats);
 router.get('/dashboard/catch-vs-quota', dashboardController.getCatchVsQuota);
+
+router.get('/dashboard/quota-usage', dashboardController.getQuotaUsage);
 router.get('/dashboard/species/:species_id/trend', dashboardController.getSpeciesTrend);
 router.get('/dashboard/overfishing-alerts', dashboardController.getOverfishingAlerts);
 router.get('/dashboard/species/:species_id/top-vessels', dashboardController.getTopVesselsBySpecies);

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import dashboardService from '../services/dashboardService';
 
 export class DashboardController {
-  
+
   async getDashboardStats(req: Request, res: Response) {
     try {
       const { year } = req.query;
@@ -100,7 +100,7 @@ export class DashboardController {
     try {
       const { species_id } = req.params;
       const { year, limit = '10' } = req.query;
-      
+
       const yearNum = year ? parseInt(year as string) : undefined;
       const limitNum = parseInt(limit as string);
 
@@ -141,6 +141,17 @@ export class DashboardController {
         error: error.message
       });
     }
+  }
+
+  async getQuotaUsage(req: Request, res: Response) {
+    const year = Number(req.query.year);
+
+    if (!year) {
+      return res.status(400).json({ message: 'Year is required' });
+    }
+
+    const result = await dashboardService.getQuotaUsage(year);
+    res.json(result);
   }
 }
 
