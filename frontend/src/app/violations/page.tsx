@@ -7,6 +7,7 @@ export default async function ViolationsPage() {
   return (
     <div>
       <h1>Violations</h1>
+      <br/>
       <ViolationTable data={violations} />
     </div>
   );

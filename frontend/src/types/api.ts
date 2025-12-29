@@ -27,7 +27,8 @@ export interface CatchVsQuota {
 export interface CatchLog {
   id: string;
   vessel_name: string;
-  captain_name: string;
+  captain_first_name: string;
+  captain_last_name: string;
   species_name: string;
   catch_date: string;
   catch_time: string;

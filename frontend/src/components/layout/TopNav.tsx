@@ -10,7 +10,7 @@ export function TopNav() {
   return (
     <header className="border-b bg-white">
       <nav className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-6">
-        <span className="font-semibold">Fisheries Compliance</span>
+        <span className="font-semibold">Fisheries Sustainability & Compliance System</span>
 
         <div className="flex gap-4">
           {NAV_ITEMS.map(item => {

@@ -17,25 +17,26 @@ export default async function DashboardPage() {
   const stats = statsResponse.data;
   const catchVsQuota = quotaResponse.data;
   //const catchLocations = mapResponse.data;
+  console.log(NAV_ITEMS);
   return (
     <section>
       <h1 style={{ marginBottom: 24 }}>Sustainability Dashboard</h1>
-      <div className="space-y-6">
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {NAV_ITEMS.filter(item => item.href !== "/dashboard").map(item => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="block rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition"
-          >
-            <h2 className="text-lg font-medium">{item.label}</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              View and manage {item.label.toLowerCase()}
-            </p>
-          </Link>
-        ))}
-      </div>
-</div>
+      {/* <div className="space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          {NAV_ITEMS.filter(item => item.href !== "/dashboard").map(item => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="block rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition"
+            >
+              <h2 className="text-lg font-medium">{item.label}</h2>
+              <p className="mt-2 text-sm text-gray-600">
+                View and manage {item.label.toLowerCase()}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div> */}
 
 
 
@@ -48,18 +49,18 @@ export default async function DashboardPage() {
           marginBottom: 40,
         }}
       >
-        <StatCard label="Active Vessels" value={stats.active_vessels} />
-        <StatCard label="Catch Today (kg)" value={stats.total_catch_today} />
-        <StatCard
+        <Link href={"/vessels"}><StatCard label="Active Vessels" value={stats.active_vessels} /></Link>
+        <Link href={"/catches"}><StatCard label="Catch Today (kg)" value={stats.total_catch_today} /></Link>
+        <Link href={"/violations"}><StatCard
           label="Active Violations"
-          value= {stats.active_violations}
+          value={stats.active_violations}
           highlight={stats.active_violations > 0 ? "warning" : "normal"}
-        />
-        <StatCard
+        /></Link>
+        <Link href={"/species"}><StatCard
           label="Compliance Rate (%)"
           value={stats.quota_compliance_rate}
           highlight={stats.quota_compliance_rate < 90 ? "critical" : "normal"}
-        />
+        /></Link>
       </div>
 
       {/* Catch vs Quota Chart */}

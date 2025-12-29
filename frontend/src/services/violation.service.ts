@@ -5,12 +5,13 @@ import { api } from "./api";
 export interface Violation {
   id: number;
   vesselId: number;
-  type: string;
+  violation_type: string;
+  vessel_name: string;
   description: string;
-  severity: "low" | "medium" | "high";
-  fineAmount: number;
-  resolved: boolean;
-  occurredAt: string;
+  severity: "minor" | "major" | "critical";
+  penalty_amount: number;
+  status: boolean;
+  violation_date: string;
 }
 
 export interface CreateViolationDTO {
