@@ -313,18 +313,14 @@ export class ViolationService {
     end_date?: string;
   }): Promise<any[]> {
     let query = `
-      SELECT 
-        v.*,
-        ve.vessel_name,
-        ve.registration_number,
-        s.common_name as species_name,
-        cl.catch_date,
-        cl.weight_kg
-      FROM violations v
-      JOIN vessels ve ON v.vessel_id = ve.id
-      LEFT JOIN catch_logs cl ON v.catch_log_id = cl.id
-      LEFT JOIN species s ON cl.species_id = s.id
-      WHERE 1=1
+          SELECT
+      v.*,
+      ve.vessel_name,
+      ve.registration_number,
+      s.common_name AS species_name
+    FROM violations v
+    JOIN vessels ve ON v.vessel_id = ve.id
+    LEFT JOIN species s ON v.species_id = s.id
     `;
 
     const values: any[] = [];

@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-
+import { TopNav } from "@/components/layout/TopNav";
 
 export const metadata = {
   title: "Fisheries Sustainability Dashboard",
@@ -14,7 +14,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <TopNav />
+        <main className="mx-auto max-w-7xl p-6">
+          {children}
+        </main>
       </body>
     </html>
   );

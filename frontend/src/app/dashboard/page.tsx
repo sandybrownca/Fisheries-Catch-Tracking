@@ -4,6 +4,8 @@ import StatCard from "@/components/ui/StatCard";
 import CatchQuotaChart from "@/components/charts/CatchQuotaChart";
 import CatchMapWrapper from "@/components/maps/CatchMapWrapper";
 
+import { NAV_ITEMS } from "@/config/navigation";
+import Link from "next/link";
 
 
 
@@ -12,16 +14,31 @@ export default async function DashboardPage() {
   const quotaResponse = await getCatchVsQuota(2025);
   //const mapResponse = await getCatchLocationData({ startDate: "2024-01-01", endDate: "2025-12-31" });
 
-  //console.log(quotaResponse)
   const stats = statsResponse.data;
-  //stats.active_violations =12;
-  //stats.quota_compliance_rate = 89;
   const catchVsQuota = quotaResponse.data;
   //const catchLocations = mapResponse.data;
   return (
     <section>
       <h1 style={{ marginBottom: 24 }}>Sustainability Dashboard</h1>
-      
+      <div className="space-y-6">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {NAV_ITEMS.filter(item => item.href !== "/dashboard").map(item => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="block rounded-xl border bg-white p-6 shadow-sm hover:shadow-md transition"
+          >
+            <h2 className="text-lg font-medium">{item.label}</h2>
+            <p className="mt-2 text-sm text-gray-600">
+              View and manage {item.label.toLowerCase()}
+            </p>
+          </Link>
+        ))}
+      </div>
+</div>
+
+
+
       {/* Stat Cards */}
       <div
         style={{

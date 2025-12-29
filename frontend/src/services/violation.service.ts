@@ -1,4 +1,5 @@
 // src/services/violation.service.ts
+import { ApiResponse } from "@/types/api";
 import { api } from "./api";
 
 export interface Violation {
@@ -25,29 +26,29 @@ export interface UpdateViolationDTO {
 }
 
 export const violationService = {
-  getAll(): Promise<Violation[]> {
-    return api("/violations");
+  getAll(){
+    return api<ApiResponse<Violation[]>>("/violations");
   },
 
-  getById(id: number): Promise<Violation> {
-    return api(`/violations/${id}`);
+  getById(id: number) {
+    return api<ApiResponse<Violation>>(`/violations/${id}`);
   },
 
-  create(data: CreateViolationDTO): Promise<Violation> {
+  create(data: CreateViolationDTO) {
     return api("/violations", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  update(id: number, data: UpdateViolationDTO): Promise<Violation> {
+  update(id: number, data: UpdateViolationDTO) {
     return api(`/violations/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
   },
 
-  delete(id: number): Promise<void> {
+  delete(id: number) {
     return api(`/violations/${id}`, {
       method: "DELETE",
     });

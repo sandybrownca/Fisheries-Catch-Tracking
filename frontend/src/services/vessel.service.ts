@@ -1,44 +1,50 @@
 // src/services/vessel.service.ts
+import { ApiResponse } from "@/types/api";
 import { api } from "./api";
 
 export interface Vessel {
   id: number;
-  name: string;
-  registrationNumber: string;
-  flagCountry: string;
-  ownerName: string;
-  status: "active" | "suspended";
+  vessel_name: string;
+  registration_number: string;
+  home_port: string;
+  owner_name: string;
+  status: "active" | "inactive";
   createdAt: string;
+  vessel_type: string;
+  length_meters: string;
+
 }
 
 export interface CreateVesselDTO {
-  name: string;
-  registrationNumber: string;
-  flagCountry: string;
-  ownerName: string;
+  vessel_name: string;
+  registration_number: string;
+  home_port: string;
+  owner_name: string;
+  vessel_type: string;
+  length_meters:string;
 }
 
 export interface UpdateVesselDTO extends Partial<CreateVesselDTO> {
-  status?: "active" | "suspended";
+  status?: "active" | "inactive";
 }
 
 export const vesselService = {
-  getAll(): Promise<Vessel[]> {
-    return api("/vessels");
+  getAll() {
+    return api<ApiResponse<Vessel[]>>("/vessels");
   },
 
-  getById(id: number): Promise<Vessel> {
-    return api(`/vessels/${id}`);
+  getById(id: number) {
+    return api<ApiResponse<Vessel>>(`/vessels/${id}`);
   },
 
-  create(data: CreateVesselDTO): Promise<Vessel> {
+  create(data: CreateVesselDTO) {
     return api("/vessels", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  update(id: number, data: UpdateVesselDTO): Promise<Vessel> {
+  update(id: number, data: UpdateVesselDTO) {
     return api(`/vessels/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),

@@ -1,32 +1,33 @@
 // src/services/species.service.ts
+import { ApiResponse } from "@/types/api";
 import { api } from "./api";
 
 export interface Species {
   id: number;
-  commonName: string;
-  scientificName: string;
-  conservationStatus: string;
+  common_name: string;
+  scientific_name: string;
+  conservation_status: string;
 }
 
 export interface CreateSpeciesDTO {
-  commonName: string;
-  scientificName: string;
-  conservationStatus: string;
+  common_name: string;
+  scientific_name: string;
+  conservation_status: string;
 }
 
 export const speciesService = {
-  getAll(): Promise<Species[]> {
-    return api("/species");
+  getAll() {
+    return api<ApiResponse<Species[]>>("/species");
   },
 
-  create(data: CreateSpeciesDTO): Promise<Species> {
+  create(data: CreateSpeciesDTO) {
     return api("/species", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  delete(id: number): Promise<void> {
+  delete(id: number){
     return api(`/species/${id}`, {
       method: "DELETE",
     });

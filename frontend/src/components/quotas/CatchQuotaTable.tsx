@@ -7,33 +7,33 @@ import clsx from 'clsx';
 export function CatchQuotaTable({ data }: { data: QuotaUsage[] }) {
   //console.log(data);
   return (
-    <div className="rounded-xl border bg-white shadow-sm">
-      <table className="w-full text-sm">
-        <thead className="border-b bg-gray-50">
+    <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+      <table className="min-w-full border-collapse text-sm">
+        <thead className="bg-gray-50">
           <tr>
-            <th className="px-4 py-3 text-left">Species</th>
-            <th className="px-4 py-3 text-right">Caught (kg)</th>
-            <th className="px-4 py-3 text-right">Quota (kg)</th>
-            <th className="px-4 py-3">Usage</th>
-            <th className="px-4 py-3 text-center">Status</th>
+            <th className="px-4 py-3 text-left font-semibold text-gray-700">Species</th>
+            <th className="px-4 py-3 text-left font-semibold text-gray-700">Caught (kg)</th>
+            <th className="px-4 py-3 text-left font-semibold text-gray-700">Quota (kg)</th>
+            <th className="px-4 py-3 text-left font-semibold text-gray-700">Usage</th>
+            <th className="px-4 py-3 text-center font-semibold text-gray-700">Status</th>
           </tr>
         </thead>
-        <tbody>
+         <tbody className="divide-y divide-gray-200">
           {data.map(row => (
-            <tr key={row.species_id} className="border-b">
-              <td className="px-4 py-3 font-medium">
+            <tr key={row.species_id} className="odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition-colors">
+              <td className="px-4 py-3 text-gray-800">
                 {row.species_name}
               </td>
 
-              <td className="px-4 py-3 text-right">
+              <td className="px-4 py-3 text-gray-800">
                 {row.total_catch_kg.toLocaleString()}
               </td>
 
-              <td className="px-4 py-3 text-right">
+              <td className="px-4 py-3 text-gray-800">
                 {row.quota_kg.toLocaleString()}
               </td>
 
-              <td className="px-4 py-3">
+              <td className="px-4 py-3 text-gray-800">
                 <Progress
                   value={Math.min(row.percentage_used, 100)} variant={row.status} />
                 <div className="mt-1 text-xs text-gray-500">

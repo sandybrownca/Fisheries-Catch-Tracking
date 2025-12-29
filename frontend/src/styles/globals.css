@@ -1,8 +1,9 @@
 /* globals.css */
 @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
-@tailwind base;
+@import "tailwindcss";
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 .leaflet-container {
   height: 100%;
